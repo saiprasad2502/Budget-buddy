@@ -12,11 +12,22 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "https://moneymate-henna.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: function (origin, callback) {
+      const allowed = [
+        (process.env.CLIENT_URL || "").trim(),
+        "http://localhost:3000"
+      ].filter(Boolean);
+      // allow server-to-server tools (no origin)
+      if (!origin) return callback(null, true);
+      if (allowed.includes(origin)) return callback(null, true);
+      return callback(new Error("CORS policy: origin not allowed"), false);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
+app.options("*", cors());
 app.use(express.json());
 
 connectDB();
