@@ -1,4 +1,4 @@
-export const BASE_URL = "https://money-mate-ekbu.onrender.com/";
+export const BASE_URL = "https://money-mate-ekbu.onrender.com";
 
 // utils/apiPaths.js
 export const API_PATHS = {
